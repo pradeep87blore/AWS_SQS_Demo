@@ -14,17 +14,37 @@ namespace SQSConsumer
     {
         private static AmazonSQSClient sqsClient = null;
 
+        private static bool useFIFOQueue = false;
+
         public SQSMessageSender()
         {
             sqsClient = SQSClientProvider.GetSQSClient();
         }
+
+        public void UseFIFOQueue(bool bEnableFIFOQueueUse)
+        {
+            useFIFOQueue = bEnableFIFOQueueUse;
+        }
+
         public bool SendMessage(string message)
         {
             try
             {
                 SendMessageRequest sendMsgReq = new SendMessageRequest();
-                sendMsgReq.QueueUrl = Configurations.QueueURL;
+                if (useFIFOQueue == true)
+                {
+                    sendMsgReq.QueueUrl = Configurations.FIFOQueueURL;
+                    sendMsgReq.MessageGroupId = "MyFIFOQueueMsgGroup"; // This is a mandatory param for FIFO queues.
+                    // It is used to group messages in the FIFO order
+
+                    sendMsgReq.MessageDeduplicationId = Guid.NewGuid().ToString();
+                }
+                else
+                {
+                    sendMsgReq.QueueUrl = Configurations.QueueURL;
+                }
                 sendMsgReq.MessageBody = message;
+                
 
                 SendMessageResponse sendMessageResponse =
                     sqsClient.SendMessage(sendMsgReq);

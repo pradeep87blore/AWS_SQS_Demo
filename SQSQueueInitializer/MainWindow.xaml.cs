@@ -29,12 +29,13 @@ namespace SQSQueueInitializer
         private void Window_Initialized(object sender, EventArgs e)
         {
             string queueName = "MySQSQueue";
-            if (CreateQueues.CreateSQSQueue(queueName))
-                MessageBox.Show(string.Format("Queue {0} created successfully", queueName));
+            if (CreateQueues.CreateSQSQueue(queueName) && CreateQueues.CreateFIFOQueue(queueName))
+                MessageBox.Show(string.Format("Queue {0} and Queue {0}.fifo created successfully", queueName));
             else
             {
-                MessageBox.Show(string.Format("Failed to create queue {0}", queueName));
+                MessageBox.Show(string.Format("Failed to create queue {0}  and queue {0}.fifo ", queueName));
             }
+
 
            this.Close();
         }

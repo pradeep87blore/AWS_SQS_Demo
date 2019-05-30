@@ -18,6 +18,8 @@ namespace SQSConsumer
 
         private static AmazonSQSClient sqsClient = null;
 
+        private static bool useFIFOQueue = false;
+
         public SQSMessageConsumer(ReceivedMessageDel subscriber)
         {
             ReceivedMessageEvent += subscriber;
@@ -27,11 +29,25 @@ namespace SQSConsumer
             //StartListeningToMessages();
         }
 
+        public void UseFIFOQueue(bool bEnableFIFOQueueUse)
+        {
+            useFIFOQueue = bEnableFIFOQueueUse;
+        }
+
+
         public void FetchMessages()
         {
             ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest();
             
-            receiveMessageRequest.QueueUrl = Configurations.QueueURL;
+            if (useFIFOQueue == true)
+            {
+                receiveMessageRequest.QueueUrl = Configurations.FIFOQueueURL;
+            }
+            else
+            {
+                receiveMessageRequest.QueueUrl = Configurations.QueueURL;
+            }
+
             receiveMessageRequest.MaxNumberOfMessages = 10;
             receiveMessageRequest.WaitTimeSeconds = 1;
             ReceiveMessageResponse receiveMessageResponse =
@@ -53,7 +69,15 @@ namespace SQSConsumer
         {
             DeleteMessageRequest deleteMessageRequest = new DeleteMessageRequest();
 
-            deleteMessageRequest.QueueUrl = Configurations.QueueURL;
+            if (useFIFOQueue == true)
+            {
+                deleteMessageRequest.QueueUrl = Configurations.FIFOQueueURL;
+            }
+            else
+            {
+                deleteMessageRequest.QueueUrl = Configurations.QueueURL;
+            }
+
             deleteMessageRequest.ReceiptHandle = msgReceiptHandle;
 
             DeleteMessageResponse response =

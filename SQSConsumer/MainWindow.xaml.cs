@@ -54,10 +54,6 @@ namespace SQSConsumer
 
         }
 
-        private void Checkbox_AutoPullMessages_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void Button_PullMessages_Click(object sender, RoutedEventArgs e)
         {
@@ -90,6 +86,12 @@ namespace SQSConsumer
             {
                 SendMessage();
             }
+        }
+
+        private void Checkbox_UseFIFOQueue_Checked(object sender, RoutedEventArgs e)
+        {
+            msgSender.UseFIFOQueue(checkbox_UseFIFOQueue.IsChecked.Value);
+            consumer.UseFIFOQueue(checkbox_UseFIFOQueue.IsChecked.Value);
         }
     }
 }

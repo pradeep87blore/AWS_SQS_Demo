@@ -64,17 +64,39 @@ namespace SQSQueueCreator
         }
 
 
-        //private const string PROFILE_NAME = "SQSDeveloper";
-        //private static bool GetCredentials(out AWSCredentials awsCredentials)
-        //{
-        //    var chain = new CredentialProfileStoreChain();
-        //    if (chain.TryGetAWSCredentials(PROFILE_NAME, out awsCredentials))
-        //    {
-        //        return true;
-        //    }
+        public static bool CreateFIFOQueue(string queueName)
+        {
+            try
+            {
+                if (sqsClient == null)
+                    InitializeSQSClient();
 
-        //    return false; // No matching profile found
-        //}
+                CreateQueueRequest createQueueRequest =
+                    new CreateQueueRequest();
+
+                createQueueRequest.Attributes = new Dictionary<string, string>();
+                createQueueRequest.Attributes.Add("FifoQueue", "true");
+
+                createQueueRequest.QueueName = queueName + ".fifo"; // FIFO queue names end with .fifo
+
+                CreateQueueResponse createQueueResponse =
+                    sqsClient.CreateQueue(createQueueRequest);
+
+                if (createQueueResponse.HttpStatusCode == HttpStatusCode.OK)
+                    return true;
+            }
+            catch (AmazonSQSException ex)
+            {
+                Console.WriteLine(ex);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+            }
+
+            return false;
+        }
 
     }
 }
