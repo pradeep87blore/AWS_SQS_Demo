@@ -9,7 +9,7 @@
     <Grid>
         <ListBox x:Name="listbox_SentMessageList" HorizontalAlignment="Left" Height="250" Margin="32,146,0,0" VerticalAlignment="Top" Width="238"/>
         <Button x:Name="button_SendMessage" Content="Send Message" HorizontalAlignment="Left" Height="24" Margin="82,109,0,0" VerticalAlignment="Top" Width="127" Click="Button_SendMessage_Click"/>
-        <TextBox x:Name="textbox_MessageToSend" HorizontalAlignment="Left" Height="84" Margin="32,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="238"/>
+        <TextBox x:Name="textbox_MessageToSend" HorizontalAlignment="Left" Height="84" Margin="32,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="238" KeyDown="Textbox_MessageToSend_KeyDown"/>
         <ListBox x:Name="listbox_ReceivedMessages" HorizontalAlignment="Left" Height="347" Margin="330,49,0,0" VerticalAlignment="Top" Width="427"/>
         <Button x:Name="button_PullMessages" Content="Pull Messages" HorizontalAlignment="Left" Height="31" Margin="617,10,0,0" VerticalAlignment="Top" Width="140" Click="Button_PullMessages_Click"/>
         <CheckBox x:Name="checkbox_AutoPullMessages" Content="CheckBox" HorizontalAlignment="Left" Height="31" Margin="349,10,0,0" VerticalAlignment="Top" Width="137" Checked="Checkbox_AutoPullMessages_Checked"/>

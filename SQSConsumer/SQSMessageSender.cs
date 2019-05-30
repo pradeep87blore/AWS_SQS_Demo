@@ -20,16 +20,27 @@ namespace SQSConsumer
         }
         public bool SendMessage(string message)
         {
-            SendMessageRequest sendMsgReq = new SendMessageRequest();
-            sendMsgReq.QueueUrl = Configurations.QueueURL;
-            sendMsgReq.MessageBody = message;
+            try
+            {
+                SendMessageRequest sendMsgReq = new SendMessageRequest();
+                sendMsgReq.QueueUrl = Configurations.QueueURL;
+                sendMsgReq.MessageBody = message;
 
-            SendMessageResponse sendMessageResponse =
-                sqsClient.SendMessage(sendMsgReq);
+                SendMessageResponse sendMessageResponse =
+                    sqsClient.SendMessage(sendMsgReq);
 
-            if (sendMessageResponse.HttpStatusCode == HttpStatusCode.OK)
-                return true;
-
+                if (sendMessageResponse.HttpStatusCode == HttpStatusCode.OK)
+                    return true;
+            }
+            catch (AmazonSQSException ex)
+            {
+                Console.WriteLine(ex);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
             return false;
         }
 

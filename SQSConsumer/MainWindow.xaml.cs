@@ -25,6 +25,11 @@ namespace SQSConsumer
         public MainWindow()
         {
             InitializeComponent();
+
+            textbox_MessageToSend.TextWrapping = TextWrapping.Wrap;
+            textbox_MessageToSend.AcceptsReturn = true;
+            textbox_MessageToSend.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            textbox_MessageToSend.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
         }
 
         private void Window_Initialized(object sender, EventArgs e)
@@ -40,6 +45,7 @@ namespace SQSConsumer
             try
             {
                 Console.WriteLine(message);
+                listbox_ReceivedMessages.Items.Add(message);
             }
             catch (Exception e)
             {
@@ -60,6 +66,11 @@ namespace SQSConsumer
 
         private void Button_SendMessage_Click(object sender, RoutedEventArgs e)
         {
+            SendMessage();
+        }
+
+        private void SendMessage()
+        {
             if (msgSender.SendMessage(textbox_MessageToSend.Text))
             {
                 listbox_SentMessageList.Items.Add(textbox_MessageToSend.Text);
@@ -70,6 +81,15 @@ namespace SQSConsumer
             }
 
             textbox_MessageToSend.Text = "";
+        }
+
+        private void Textbox_MessageToSend_KeyDown(object sender, KeyEventArgs e)
+        {
+            // NOTE: This event doesnt get captured since the textbox has "AcceptReturn" turned on
+            if (e.IsDown == true && e.Key == Key.Enter)
+            {
+                SendMessage();
+            }
         }
     }
 }
