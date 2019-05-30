@@ -1,0 +1,1 @@
+This is a project to demonstrate the basic usage of the AWS SQS (Simple Queue Service) with .NET SDK
